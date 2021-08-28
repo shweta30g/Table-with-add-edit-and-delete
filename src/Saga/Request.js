@@ -10,9 +10,25 @@ export function requestGetUser() {
 
 //post 
 export function createUserReq(data) {
+  if(data.id) {
+    return axios.request({
+      method: "patch",
+      url: `https://jsonplaceholder.typicode.com/posts/${data.id}`, 
+      data,
+    })
+  } else{
+    return axios.request({
+      method: "post",
+      url: "https://jsonplaceholder.typicode.com/posts", 
+      data,
+    })
+  }
+}
+
+export function deleteUserReq(id) {
   return axios.request({
-    method: "post",
-    url: "https://jsonplaceholder.typicode.com/posts", 
-    data,
+    method: "delete",
+    url: `https://jsonplaceholder.typicode.com/posts/${id}`, 
+    id,
   })
 }

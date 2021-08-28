@@ -1,12 +1,12 @@
-import React,{ useState } from 'react'
+import React,{ useEffect } from 'react'
 import { useDispatch, useSelector } from "react-redux";
 import { createPost, storeUserData} from '../Actions/Action'
 import '../Components/TestStyle.css'
 import Modal from 'react-modal'
 import { Container, Button,Row, Col,Form } from 'react-bootstrap';
 
-function ModalEdit() {
-    const [modalIsOpen, setModalIsOpen] = useState(false);
+function ModalEdit(props) {
+   console.log("testing", props)
     const formData = useSelector(state => state.user.formData)
     const dispatch = useDispatch();
 
@@ -17,34 +17,38 @@ function ModalEdit() {
     }
     
     const handleDataSubmit = () => {
-        dispatch(createPost(formData));
-        console.log("saved clicked data", formData)
+        dispatch(createPost(formData,props.setClose));
+        console.log("saved changed data", formData)
     }
+    useEffect(() => {
+    
+        return () => {
+           dispatch(storeUserData({}))  
+           console.log("unmount data")
+        }
+    }, [])
 
 
     return (
         <div>
         
-        <Container>
-                <h2 style={{background: "#7f9db7"}}>Add the details</h2>
-                <Button color="primary" onClick={() => setModalIsOpen(true)}>ADD</Button>  
-        </Container>
-        <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={() => setModalIsOpen(false)}
        
+        <Modal
+        isOpen={props.isOpen}
+        onRequestClose={ () => props.setClose}
         >
         <Container>
             <Row>
                 <Col>
                     <Form>
-                    <h2  style={{background: "#7f9db7"}}>Add the Details</h2><hr/>
+                    <h2  style={{background: "#7f9db7"}}>{formData.id ? "Edit the Details" : "Add the Details"}</h2><hr/>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                             <Form.Label style={{fontWeight: "bold"}}>User Id</Form.Label>
                             <Form.Control 
                                 type="number" 
                                 placeholder="Enter the User Id" 
                                 name="userId"
+                                value={formData.userId}
                                 onChange={handleAddChange}
                             />
                         </Form.Group>
@@ -55,6 +59,7 @@ function ModalEdit() {
                                 placeholder="Enter the Title" 
                                 name="title"
                                 onChange={handleAddChange}
+                                value={formData.title}
                             />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
@@ -65,12 +70,13 @@ function ModalEdit() {
                                 placeholder="Enter the text for Body" 
                                 name="body"
                                 onChange={handleAddChange}
+                                value={formData.body}
                             />
                         </Form.Group>
                     </Form>
                     <div className="btn"> 
                     <Button  onClick={handleDataSubmit}>Save</Button>
-                    <Button  onClick={() => setModalIsOpen(false)}>Cancel</Button>
+                    <Button  onClick= {props.setClose}>Cancel</Button>
                     </div>
                 </Col>
             </Row>

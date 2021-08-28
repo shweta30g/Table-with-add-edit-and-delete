@@ -1,4 +1,4 @@
-import { GET_USER,SET_USER,CREATE_POST,STORE_USER_DATA } from '../Action.Constant'
+import { GET_USER,SET_USER,CREATE_POST,STORE_USER_DATA,DELETE_USER_DATA } from '../Action.Constant'
 
 const getUser = () => ({
   type: GET_USER
@@ -9,9 +9,10 @@ const setUser = (user) => ({
   user
 });
 
-const createPost = (data) => ({
+const createPost = (data,callBack) => ({
   type: CREATE_POST,
-  payload: data 
+  payload: data,
+  callBack,
 })
 
 const storeUserData = (data) => ({
@@ -19,9 +20,17 @@ const storeUserData = (data) => ({
   payload: data,
 })
 
+const deleteUserData = (id, callBack) => ({
+  type: DELETE_USER_DATA,
+  payload: id,
+  callBack,
+})
 
 
-export{ getUser, setUser, createPost,storeUserData}
+
+
+
+export{ getUser, setUser, createPost,storeUserData,deleteUserData}
 
 
 
